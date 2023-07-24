@@ -1,0 +1,15 @@
+//
+// Created by vitor on 23/07/23.
+//
+
+#ifndef CALCULADORA_TABELA_VERDADE_GET_RESULTS_H
+#define CALCULADORA_TABELA_VERDADE_GET_RESULTS_H
+
+
+class get_results {
+
+
+};
+
+
+#endif //CALCULADORA_TABELA_VERDADE_GET_RESULTS_H
