@@ -20,10 +20,14 @@ int tamanho_tabela(char *operation){
 arv_operacoes::arv_operacoes(char *operation) {
     int size_table = tamanho_tabela(operation);
     this->vars = new map_vars(size_table, operation);
-    if(*operation == '!' and *(operation+1) == '('){
-        this->raiz = new no_tabela_verdade(operation+1, size_table, true, this->vars);
-    }else
-        this->raiz = new no_tabela_verdade(operation, size_table, false, this->vars);
+    printf("variables: \n");
+    this->vars->show_vars();
+    printf("___________________________________________________\n");
+
+
+
+    this->raiz = new no_tabela_verdade(operation, size_table, false, this->vars);
+
 
     this->raiz->resolving();
 
