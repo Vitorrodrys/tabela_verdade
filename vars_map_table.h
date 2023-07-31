@@ -22,6 +22,16 @@ public:
     bool* operator[](char var){
         return this->vars[var];
     }
+
+    void show_vars(){
+        for(auto &key_value:this->vars){
+            printf("%c:\n", key_value.first);
+            for(int i = 0; i<this->tamanho; i++){
+                printf(key_value.second[i]? "V":"F");
+            }
+            printf("\n");
+        }
+    }
 };
 
 

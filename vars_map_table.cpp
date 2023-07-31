@@ -24,7 +24,7 @@ int map_vars::include(char var) {
             }
         }
         delete[] tmp;
-        return 1;
+        return 0;
     }
 
     for(int i = 0; i<this->tamanho; i+=this->dist){
@@ -47,8 +47,8 @@ map_vars::map_vars(int tamanho, char *operacao) {
             auto it = this->vars.find(*aux);
 
             if(it == this->vars.end()){
-                this->include(*aux);
-                this->dist/=2;
+                if (this->include(*aux))
+                    this->dist/=2;
             }
         }
     }

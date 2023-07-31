@@ -10,6 +10,8 @@
 #include <exception>
 #include "funcoes_memoria.h"
 #include "vars_map_table.h"
+#include <algorithm>
+#include <ranges>
 class vectorChar{
 public:
     char *vector;
@@ -80,6 +82,9 @@ public:
     ~no_tabela_verdade();
     void resolving();
 
+    bool is_something_one_char(const char* op) {
+        return std::ranges::all_of(dict_op, [op](const auto& key) { return strchr(op, key.first) == nullptr; });
+    }
     void resolve_and(){
         for(int i = 0; i<this->tam_values; i++){
             this->__valores__[i] = this->esq->__valores__[i] and this->dir->__valores__[i];
@@ -107,9 +112,9 @@ public:
         }
     }
     void show_result(){
-        static int descloc = 0;
+        //static int descloc = 0;
 
-        printf("solucao %s%s:\n", this->__not?"!":"",this->operacao_or);
+        printf("solucao %s:\n", this->operacao_or);
         for(int i = 0; i<this->tam_values; i++){
             printf(this->__valores__[i]?"V":"F");
         }

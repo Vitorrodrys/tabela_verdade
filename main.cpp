@@ -5,6 +5,7 @@
 #include <getopt.h>
 #include <unistd.h>
 #include <fcntl.h>
+#define herdastruct(nome, maisopcoes) \
 
 char *dig_text(FILE *f, char parar){
 
@@ -47,6 +48,9 @@ int igual_parenteses(int token){
     return token == '(' or isdigit(token) or token == '!';
 }
 int main(int argc, char **argv) {
+
+
+
 
 
 

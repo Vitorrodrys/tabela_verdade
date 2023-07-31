@@ -2,7 +2,7 @@ TARGET = calculadora_boleana
 
 CXX = g++
 
-CXXFLAGS = -std=c++11 -Wall -Wextra
+CXXFLAGS = -std=c++20
 
 SOURCES = arvore_operacoes.cpp main.cpp vars_map_table.cpp funcoes_memoria.cpp no_tabela_verdade.cpp get_results.cpp validations.cpp
 

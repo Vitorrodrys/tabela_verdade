@@ -11,10 +11,16 @@
 #include "validations.h"
 
 
-bool is_something_one_char(const char *op){
-
-    return (isalpha(*op) or isdigit(*op)) and *(op+1) == '\0';
+int count_ocorrency(char *str, char caracter){
+    int ocorruncy = 0;
+    while((str = strchr(str, caracter))) {
+        ocorruncy++;
+        str++;
+    }
+    return ocorruncy;
 }
+
+
 
 bool no_tabela_verdade::verify_remove_parentheses(char *operation) {
     if(*operation != '('){
@@ -47,7 +53,7 @@ no_tabela_verdade::no_tabela_verdade(int tamanho_tabela, char op, map_vars *vars
 
 char *find_last_operator(char *op, std::map<char, operacao> *dict){
 
-    char *pos_last_operator;
+    char *pos_last_operator = nullptr;
     int count_parentheses = 0;
     while (*op){
         if(*op == '(' ){
@@ -63,6 +69,16 @@ char *find_last_operator(char *op, std::map<char, operacao> *dict){
     return pos_last_operator;
 }
 
+bool not_follow_parentheses(char *op){
+
+    while(not isalpha(*op)){
+        if(*op == '('){
+            return true;
+        }
+        op++;
+    }
+    return false;
+}
 no_tabela_verdade::no_tabela_verdade(char *operation, int tamanho_tabela, bool negacao, map_vars *vars) {
 
 
@@ -70,62 +86,53 @@ no_tabela_verdade::no_tabela_verdade(char *operation, int tamanho_tabela, bool n
 
     this->operacao_or = new char[strlen(operation)+1];
     strcpy(this->operacao_or, operation);
-
-    while(*operation == '!' and (*(operation+1) == '(' or *(operation+1) == '!') ) {
-        negacao = not negacao;
-        operation++;
-    }
-    while(this->verify_remove_parentheses(operation)){
-        operation++;
-        *(strchr(operation, '\0')-1) = '\0';
-
-        while(*operation == '!' and (*(operation+1) == '(' or *(operation+1) == '!') ) {
-            negacao = not negacao;
-            operation++;
-        }
-    }
-
     this->tam_values = tamanho_tabela;
     this->__valores__ = new bool[tamanho_tabela];
     this->__not = negacao;
-    char *in = operation;
     char *last_op = find_last_operator(operation, &this->dict_op);
-    this->op = this->dict_op[*last_op];
-    if(*(last_op+1) == '!') {
+    while ( not last_op) {
 
-        if( not is_something_one_char(last_op+2)){
-            this->dir = new no_tabela_verdade(last_op+2, tamanho_tabela, true, vars);
-        }else{
-            this->dir = new no_tabela_verdade(tamanho_tabela, *(last_op+2),vars, true);
 
+
+        while(*operation != '('){
+            if(*operation == '!'){
+                this->__not = not this->__not;
+            }
+            operation++;
         }
+        operation++;
+        *(strchr(operation, '\0')-1) = '\0';
+        last_op =  find_last_operator(operation, &this->dict_op);
 
-    }else{
-        if( not is_something_one_char(last_op+1)){
-            this->dir = new no_tabela_verdade(last_op+1, tamanho_tabela, false, vars);
-        }else{
-            this->dir = new no_tabela_verdade(tamanho_tabela, *(last_op+1), vars, false);
-        }
     }
+    char *in = operation;
+    this->op = this->dict_op[*last_op];
+    bool negation_new = false;
+    char *aux = last_op+1;
+
+    if( not this->is_something_one_char(aux)){
+        this->dir = new no_tabela_verdade(aux, tamanho_tabela, negation_new, vars);
+    }else{
+        char *aux2= aux;
+        while(*aux2== '!')
+            aux2++;
+        this->dir = new no_tabela_verdade(tamanho_tabela, *aux2,vars, (count_ocorrency(aux, '!')%2));
+
+    }
+
 
     *last_op = '\0';
-    if(*in == '!'){
-
-        if (not is_something_one_char(in+1)){
-            this->esq = new no_tabela_verdade(in+1, tamanho_tabela, true, vars);
-        }else{
-            this->esq = new no_tabela_verdade(tamanho_tabela, *(in+1), vars, true);
-        }
-
+    aux = in;
+    if (not is_something_one_char(aux)){
+        this->esq = new no_tabela_verdade(aux, tamanho_tabela, negation_new, vars);
     }else{
-        if(not is_something_one_char(in)){
-            this->esq = new no_tabela_verdade(in, tamanho_tabela, false, vars);
-
-        }else{
-            this->esq = new no_tabela_verdade(tamanho_tabela, *in, vars, false);
-        }
-
+        char *aux2 = aux;
+        while (*aux2 == '!')
+            aux2++;
+        this->esq = new no_tabela_verdade(tamanho_tabela, *aux2, vars,  (count_ocorrency(aux, '!') %2));
     }
+
+
 
 
 
